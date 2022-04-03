@@ -9,11 +9,11 @@ interface GameService {
 
     fun finishGame(id: Int) : Game
 
-    fun updateScoreForHomeAndAway(id: Int, homeScore: Int, awayScore: Int)
+    fun updateScoreForHomeAndAway(id: Int, homeScore: Int, awayScore: Int) : Game
 
-    fun updateHomeScore(id: Int, homeScore: Int)
+    fun updateHomeScore(id: Int, homeScore: Int) : Game
 
-    fun updateAwayScore(id: Int, awayScore: Int)
+    fun updateAwayScore(id: Int, awayScore: Int) : Game
 
     fun getInProgressSummary(): Summary
 

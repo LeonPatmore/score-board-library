@@ -3,8 +3,10 @@ import model.GameStatus
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import services.GameService
 import services.GameServiceImplementation
+import services.exceptions.GameAlreadyStartedException
 
 internal class E2ETest {
 
@@ -16,7 +18,7 @@ internal class E2ETest {
     }
 
     @Test
-    internal fun `test inserting a game defaults to 0 - 0, including the summary`() {
+    internal fun `test starting a game defaults to 0 - 0, including the summary`() {
         val game = gameService.startGame(TEAM_CANADA, TEAM_SPAIN)
         assertEquals(0, game.away.score)
         assertEquals(0, game.home.score)
@@ -26,6 +28,18 @@ internal class E2ETest {
         assertEquals(1, summary.games.size)
         assertEquals(0, summary.games[0].home.score)
         assertEquals(0, summary.games[0].away.score)
+    }
+
+    @Test
+    internal fun `test starting a game when home team is already playing throws an exception`() {
+        gameService.startGame(TEAM_CANADA, TEAM_SPAIN)
+        assertThrows<GameAlreadyStartedException> { gameService.startGame(TEAM_CANADA, TEAM_AUSTRALIA) }
+    }
+
+    @Test
+    internal fun `test starting a game when away team is already playing throws an exception`() {
+        gameService.startGame(TEAM_CANADA, TEAM_SPAIN)
+        assertThrows<GameAlreadyStartedException> { gameService.startGame(TEAM_SPAIN, TEAM_AUSTRALIA) }
     }
 
     @Test

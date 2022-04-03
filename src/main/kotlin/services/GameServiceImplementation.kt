@@ -6,6 +6,7 @@ import model.GameStatus
 import model.Summary
 import model.TeamScore
 import mu.KotlinLogging
+import services.exceptions.GameAlreadyStartedException
 
 private val logger = KotlinLogging.logger {}
 
@@ -13,6 +14,7 @@ class GameServiceImplementation(private val gamePersistence: GamePersistence) : 
 
     override fun startGame(homeTeam: String, awayTeam: String): Game {
         logger.info { "Starting game for home team $homeTeam and away team $awayTeam" }
+        ensureGameMakesSense(homeTeam, awayTeam)
         return gamePersistence.insertWithHomeAndAwayAndGameStatus(
             home = TeamScore(homeTeam),
             away = TeamScore(awayTeam),
@@ -51,6 +53,17 @@ class GameServiceImplementation(private val gamePersistence: GamePersistence) : 
 
     private fun Game.totalScore() : Int {
         return this.away.score + this.home.score
+    }
+
+    private fun ensureGameMakesSense(homeTeam: String, awayTeam: String) {
+        if (teamAlreadyPlaying(homeTeam) || teamAlreadyPlaying(awayTeam)) {
+            throw GameAlreadyStartedException()
+        }
+    }
+
+    private fun teamAlreadyPlaying(team: String) : Boolean {
+        return gamePersistence.getWhereHomeTeamAndInProgress(team).isNotEmpty() ||
+                gamePersistence.getWhereAwayTeamAndInProgress(team).isNotEmpty()
     }
 
 }

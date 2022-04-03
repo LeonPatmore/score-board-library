@@ -42,4 +42,12 @@ class InMemoryGamePersistence : GamePersistence {
         return gameMap.values.filter { it.gameStatus == GameStatus.IN_PROGRESS }.sortedByDescending { it.id }
     }
 
+    override fun getWhereHomeTeamAndInProgress(team: String): List<Game> {
+        return gameMap.values.filter { it.home.teamName == team }.filter { it.gameStatus == GameStatus.IN_PROGRESS }
+    }
+
+    override fun getWhereAwayTeamAndInProgress(team: String): List<Game> {
+        return gameMap.values.filter { it.away.teamName == team }.filter { it.gameStatus == GameStatus.IN_PROGRESS }
+    }
+
 }

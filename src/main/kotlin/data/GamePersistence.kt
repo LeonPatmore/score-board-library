@@ -16,4 +16,8 @@ interface GamePersistence {
 
     fun getAllInProgressOrderByIdDescending() : List<Game>
 
+    fun getWhereHomeTeamAndInProgress(team: String) : List<Game>
+
+    fun getWhereAwayTeamAndInProgress(team: String) : List<Game>
+
 }

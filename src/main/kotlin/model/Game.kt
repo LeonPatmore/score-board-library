@@ -4,7 +4,7 @@ package model
 data class Game(val id: Int,
                 val home: TeamScore,
                 val away: TeamScore,
-                val gameStartTime: Int,
+                val timestampAdded: Long = System.currentTimeMillis(),
                 val gameStatus: GameStatus = GameStatus.IN_PROGRESS)
 
 

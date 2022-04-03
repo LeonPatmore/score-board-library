@@ -1,8 +1,10 @@
+import data.InMemoryGamePersistence
 import model.GameStatus
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import services.GameService
+import services.GameServiceImplementation
 
 internal class E2ETest {
 
@@ -10,7 +12,7 @@ internal class E2ETest {
 
     @BeforeEach
     internal fun setUp() {
-        // TODO: Setup the service here.
+        gameService = GameServiceImplementation(InMemoryGamePersistence())
     }
 
     @Test
@@ -42,7 +44,7 @@ internal class E2ETest {
 
         val updatedGame = gameService.updateScoreForHomeAndAway(game.id, 2, 3)
         assertEquals(2, updatedGame.home.score)
-        assertEquals(2, updatedGame.away.score)
+        assertEquals(3, updatedGame.away.score)
     }
 
     @Test
